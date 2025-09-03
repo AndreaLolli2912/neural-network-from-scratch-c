@@ -1,6 +1,7 @@
 /* main file entry for the dataset generation functions */
 #include "dataset.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -10,7 +11,7 @@ void generate_random_images(unsigned char** images, int *nSamples)
     *nSamples = DATASET_SIZE; // number of images
     *images   = malloc((*nSamples) * IMAGE_SIZE); // allocate memory
 
-    if (!*images) {
+    if (!images) {
         printf("Memory allocation failed for images\n");
         exit(1);
     }
@@ -32,6 +33,6 @@ void generate_random_labels(unsigned char **labels, int *nSamples)
         exit(1);
     }
 
-    for (int i = 0, i < (*nSamples); i++)
+    for (int i = 0; i < (*nSamples); i++)
         (*labels)[i] = rand() % NUM_CLASSES;
 }
