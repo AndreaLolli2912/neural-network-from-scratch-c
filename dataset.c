@@ -1,38 +1,33 @@
-/* main file entry for the dataset generation functions */
+/*
+Main file entry for the dataset generation functions.
+User must allocate memory autonomously and pass pointer.
+Functions access memory allocation and fill with rand values.
+*/
 #include "dataset.h"
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
-/* generate random images */
-void generate_random_images(unsigned char** images, int *nSamples)
+void generate_random_images(unsigned char* images, int nSamples)
 {
-    *nSamples = DATASET_SIZE; // number of images
-    *images   = malloc((*nSamples) * IMAGE_SIZE); // allocate memory
-
-    if (!images) {
-        printf("Memory allocation failed for images\n");
-        exit(1);
-    }
-
-    srand(time(NULL)); // seed RNG
-
-    for (int i = 0; i < (*nSamples) * IMAGE_SIZE; i++) {
-        (*images)[i] = rand() % 256; // pixel values 0-255
-    }
+    for (int i = 0; i < nSamples * IMAGE_SIZE; i++)
+        images[i] = rand() % 256; // values bounded [0, 255]
 }
 
-void generate_random_labels(unsigned char **labels, int *nSamples)
+void generate_random_labels(unsigned char* labels, int nSamples)
 {
-    *nSamples = DATASET_SIZE; // number of labels
-    *labels = malloc(*nSamples); //allocate memory
+    for (int i = 0; i < nSamples; i++)
+        labels[i] = rand() % NUM_CLASSES;
+}
 
-    if (!*labels) {
-        printf("Memory allocation failed for labels\n");
+void generate_random_mnist(unsigned char *images, unsigned char *labels, int nSamples)
+{
+    // handle memory allocation failures
+    if (!images || !labels) {
+        printf("Memory allocation failed");
         exit(1);
     }
 
-    for (int i = 0; i < (*nSamples); i++)
-        (*labels)[i] = rand() % NUM_CLASSES;
+    // fill images
+    generate_random_images(images, nSamples);
+    generate_random_labels(labels, nSamples);
 }
