@@ -21,13 +21,7 @@ void generate_random_labels(unsigned char* labels, int nSamples)
 
 void generate_random_mnist(unsigned char *images, unsigned char *labels, int nSamples)
 {
-    // handle memory allocation failures
-    if (!images || !labels) {
-        printf("Memory allocation failed");
-        exit(1);
-    }
-
-    // fill images
+    // fill images and labels arrays
     generate_random_images(images, nSamples);
     generate_random_labels(labels, nSamples);
 }

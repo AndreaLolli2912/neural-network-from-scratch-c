@@ -20,9 +20,17 @@ int main()
     unsigned char *images = malloc(IMAGE_SIZE * nSamples * sizeof(*images));
     unsigned char *labels = malloc(             nSamples * sizeof(*labels));
 
+    // handle memory allocation failures
+    if (!images || !labels) {
+        printf("Memory allocation failed");
+        exit(1);
+    }
+
     // fill allocated memory
     generate_random_mnist(images, labels, nSamples);
 
+    /*
+    MATRICES CONTENT TESTS
     printf("images@%p, labels@%p\n", (void *)images, (void *)labels);
     printf("images 1st item = %d\n", *images);
     printf("labels 1st item = %d\n", *labels);
@@ -34,6 +42,7 @@ int main()
         }
         printf("\n");
     }
+    */
 
     /* NEVER FORGET TO FREE ALLOCATED MEMORY */
     free(images);
