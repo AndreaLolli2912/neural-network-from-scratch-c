@@ -1,6 +1,7 @@
 #include "dataset.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 /*
@@ -11,7 +12,7 @@ We will fill allocated arrays.
 int main()
 {
     // define vars
-    int nSamples = DATASET_SIZE;
+    int nSamples  = DATASET_SIZE;
 
     // set random seed
     srand(time(NULL));
@@ -28,6 +29,21 @@ int main()
 
     // fill allocated memory
     generate_random_mnist(images, labels, nSamples);
+
+    // copy data for type conversion
+    unsigned char *images_copy = malloc(IMAGE_SIZE * nSamples * sizeof(*images_copy));
+    unsigned char *labels_copy = malloc(             nSamples * sizeof(*labels_copy));
+
+    memcpy(images_copy, images, IMAGE_SIZE * nSamples * sizeof(*images_copy));
+    memcpy(labels_copy, labels,              nSamples * sizeof(*labels_copy));
+
+    // handle memory allocation failures
+    if (!images_copy || !labels_copy) {
+        printf("Memory allocation failed for copies\n");
+        exit(1);
+    }
+
+
 
     /*
     MATRICES CONTENT TESTS
