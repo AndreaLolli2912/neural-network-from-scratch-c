@@ -64,8 +64,8 @@ int main() {
     int nSamples = DATASET_SIZE;
     srand(time(NULL));
 
-    unsigned char *images = malloc(IMAGE_SIZE * nSamples);
-    unsigned char *labels = malloc(nSamples);
+    unsigned char *images = malloc(IMAGE_SIZE * nSamples * sizeof(*images));
+    unsigned char *labels = malloc(             nSamples * sizeof(*labels));
     generate_random_mnist(images, labels, nSamples);
 
     // Run the test
