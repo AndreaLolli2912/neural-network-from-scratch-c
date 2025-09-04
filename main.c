@@ -1,4 +1,6 @@
 #include "dataset.h"
+#include "utils.h"
+#include "scaler.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,60 +11,70 @@ Dataset generation,
 We will fill allocated arrays.
 */
 
-int main()
-{
-    // define vars
-    int nSamples  = DATASET_SIZE;
+int STANDARDIZE = 1;
 
-    // set random seed
+
+void test_dataset_conversion_and_scaling(unsigned char *images_uc, int nSamples) {
+    printf("=== Testing Dataset Conversion & Scaling ===\n");
+
+    // Allocate float memory
+    float *images_float = malloc(IMAGE_SIZE * nSamples * sizeof(*images_float));
+    if (!images_float) {
+        printf("Memory allocation failed for images_float\n");
+        return;
+    }
+
+    // Convert to float
+    convert_img_to_float(images_uc, images_float, nSamples);
+
+    // Print first image (raw float values)
+    printf("\nFirst image as float (raw):\n");
+    for (int i = 0; i < IMAGE_SIZE; i++) {
+        printf("%6.1f ", images_float[i]);
+        if ((i+1) % 9 == 0) printf("\n"); // adjust for small IMAGE_SIZE
+    }
+
+    // Apply MinMaxScaler
+    float *images_std = malloc(IMAGE_SIZE * nSamples * sizeof(*images_std));
+    if (!images_std) {
+        printf("Memory allocation failed for images_std\n");
+        free(images_float);
+        return;
+    }
+
+    MinMaxScaler *scaler = MinMaxScaler_new();
+    MinMaxScaler_fit_transform(scaler, images_float, images_std, nSamples);
+
+    // Print first image after scaling
+    printf("\nFirst image after MinMax scaling [0,1]:\n");
+    for (int i = 0; i < IMAGE_SIZE; i++) {
+        printf("%0.3f ", images_std[i]);
+        if ((i+1) % 9 == 0) printf("\n");
+    }
+
+
+    // Free memory
+    free(images_float);
+    free(images_std);
+    MinMaxScaler_del(scaler);
+    printf("\n=== Test Complete ===\n");
+}
+
+int main() {
+    int nSamples = DATASET_SIZE;
     srand(time(NULL));
 
-    // allocate dataset memory
-    unsigned char *images = malloc(IMAGE_SIZE * nSamples * sizeof(*images));
-    unsigned char *labels = malloc(             nSamples * sizeof(*labels));
-
-    // handle memory allocation failures
-    if (!images || !labels) {
-        printf("Memory allocation failed");
-        exit(1);
-    }
-
-    // fill allocated memory
+    unsigned char *images = malloc(IMAGE_SIZE * nSamples);
+    unsigned char *labels = malloc(nSamples);
     generate_random_mnist(images, labels, nSamples);
 
-    // copy data for type conversion
-    unsigned char *images_copy = malloc(IMAGE_SIZE * nSamples * sizeof(*images_copy));
-    unsigned char *labels_copy = malloc(             nSamples * sizeof(*labels_copy));
+    // Run the test
+    test_dataset_conversion_and_scaling(images, nSamples);
 
-    memcpy(images_copy, images, IMAGE_SIZE * nSamples * sizeof(*images_copy));
-    memcpy(labels_copy, labels,              nSamples * sizeof(*labels_copy));
-
-    // handle memory allocation failures
-    if (!images_copy || !labels_copy) {
-        printf("Memory allocation failed for copies\n");
-        exit(1);
-    }
-
-
-
-    /*
-    MATRICES CONTENT TESTS
-    printf("images@%p, labels@%p\n", (void *)images, (void *)labels);
-    printf("images 1st item = %d\n", *images);
-    printf("labels 1st item = %d\n", *labels);
-
-    printf("First image:\n");
-    for (int row = 0; row < 3; row++) {
-        for (int col = 0; col < 3; col++) {
-            printf("%3d ", images[row * 3 + col]);
-        }
-        printf("\n");
-    }
-    */
-
-    /* NEVER FORGET TO FREE ALLOCATED MEMORY */
+    // Clean up
     free(images);
     free(labels);
+    return 0;
 }
 
 
