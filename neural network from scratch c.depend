@@ -1,0 +1,28 @@
+# depslib dependency file v1.0
+1757001912 source:c:\cbprojects\neural network from scratch c\main.c
+	"dataset.h"
+	"utils.h"
+	"scaler.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1756987509 source:c:\cbprojects\neural network from scratch c\dataset.c
+	"dataset.h"
+	<stdio.h>
+	<stdlib.h>
+
+1756981002 c:\cbprojects\neural network from scratch c\dataset.h
+
+1756997217 source:c:\cbprojects\neural network from scratch c\utils.c
+	"dataset.h"
+
+1757001928 source:c:\cbprojects\neural network from scratch c\scaler.c
+	<stdlib.h>
+	<stdio.h>
+
+1756997224 c:\cbprojects\neural network from scratch c\utils.h
+
+1757001645 c:\cbprojects\neural network from scratch c\scaler.h
+
