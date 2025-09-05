@@ -27,5 +27,13 @@
 
 1757001645 c:\cbprojects\neural network from scratch c\scaler.h
 
-1757078868 c:\cbprojects\neural network from scratch c\network.h
+1757082392 c:\cbprojects\neural network from scratch c\network.h
+
+1757083439 source:c:\cbprojects\neural network from scratch c\network.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<time.h>
+	<math.h>
+	"network.h"
 
